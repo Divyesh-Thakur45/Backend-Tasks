@@ -31,4 +31,24 @@ const NotesDelete = async (req, res) => {
   await NotesModel.findByIdAndDelete(isDelete);
   return res.status(200).send({ message: "Note deleted successfully" });
 };
-module.exports = { NotesCreate, NotesDelete };
+
+const NotesGet = async (req, res) => {
+  const { id } = req.params;
+
+  // console.log(userId);
+  const isValide = await NotesModel.findById(id);
+  const userId = isValide.userId;
+  // console.log(userId);
+  try {
+    if (!isValide) {
+      return res.status(404).send({ message: "User not found" });
+    }
+    const obj = await NotesModel.find({ userId });
+    console.log(obj);
+  } catch (error) {
+    console.log(error);
+    return res.status(404).send({ message: error });
+  }
+};
+
+module.exports = { NotesCreate, NotesDelete, NotesGet };

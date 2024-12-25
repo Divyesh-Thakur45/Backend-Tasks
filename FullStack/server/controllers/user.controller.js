@@ -46,7 +46,7 @@ const signin = async (req, res) => {
         console.log(err);
       } else {
         // console.log(isValide);
-        jwt.sign({ userData: isValide }, process.env.key , (err, token) => {
+        jwt.sign({ userData: isValide }, process.env.key, (err, token) => {
           if (err) {
             return res.status(500).send("Error in signing up");
           }
@@ -61,4 +61,5 @@ const signin = async (req, res) => {
     console.log("please login first");
   }
 };
+
 module.exports = { signup, signin };
