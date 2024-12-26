@@ -51,4 +51,50 @@ const NotesGet = async (req, res) => {
   }
 };
 
-module.exports = { NotesCreate, NotesDelete, NotesGet };
+const NotesOneGet = async (req, res) => {
+  const { id } = req.params;
+
+  const isValide = await NotesModel.findById(id);
+  try {
+    if (!isValide) {
+      return res.status(404).send({ message: "User not found" });
+    }
+    const obj = await NotesModel.find({ isValide });
+    console.log(obj);
+  } catch (error) {
+    console.log(error);
+    return res.status(404).send({ message: error });
+  }
+};
+
+const NotesUpdate = async (req, res) => {
+  const { noteId } = req.params;
+  try {
+    const isFind = await NotesModel.findById(noteId);
+    console.log(isFind);
+    if (!isFind) {
+      return res.status(404).send({ message: "Note not found" });
+    }
+    if (req.file) {
+      await NotesModel.findByIdAndUpdate(noteId, {
+        ...req.file,
+        Image: req.file.originalname,
+      });
+      return res.status(200).send({ message: "Image uploaded successfully" });
+    } else {
+      await NotesModel.findByIdAndUpdate(noteId, req.body);
+      return res.status(200).send({ message: "Note updated successfully" });
+    }
+  } catch (error) {
+    res.status(404).send({ message: "User not found" });
+    console.log(error);
+  }
+  res.send("ohk");
+};
+module.exports = {
+  NotesCreate,
+  NotesDelete,
+  NotesGet,
+  NotesOneGet,
+  NotesUpdate,
+};
