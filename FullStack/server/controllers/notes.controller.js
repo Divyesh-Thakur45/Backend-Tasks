@@ -91,10 +91,33 @@ const NotesUpdate = async (req, res) => {
   }
   res.send("ohk");
 };
+
+// Admin interface
+const AdmineGet = async (req, res) => {
+  const { noteId } = req.params;
+  const isAdmine = await NotesModel.findById(noteId);
+  try {
+    if (!isAdmine) {
+      return res.status(404).send({ message: "Note not found" });
+    }
+    if (req.user.role === "admin") {
+      console.log("Admin");
+      // const notes = await NotesModel.find({noteId});
+      // console.log(notes);
+      // return res.status(200).send({ message: "Note updated successfully" });
+    }
+    console.log("Out Of condition");
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({ message: "Server error" });
+  }
+};
+
 module.exports = {
   NotesCreate,
   NotesDelete,
   NotesGet,
   NotesOneGet,
   NotesUpdate,
+  AdmineGet,
 };

@@ -5,6 +5,7 @@ const {
   NotesGet,
   NotesOneGet,
   NotesUpdate,
+  AdmineGet,
 } = require("../controllers/notes.controller");
 const upload = require("../middleware/multer");
 
@@ -24,4 +25,7 @@ NoteRoutes.get("/getNotes/:id", NotesOneGet);
 
 // Notes Update
 NoteRoutes.patch("/update/:noteId", upload.single("file"), NotesUpdate);
+
+// Admine Get All Notes
+NoteRoutes.get("/admine/:noteId", AdmineGet)
 module.exports = { NoteRoutes };
