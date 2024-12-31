@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const connect = require("./config/db");
 const { userRoutes } = require("./routes/user.routes");
 const cookieParser = require("cookie-parser");
@@ -7,6 +8,13 @@ const { isAuth } = require("./middleware/isAuth");
 
 require("dotenv").config();
 const app = express();
+app.use(
+  cors({
+    origin: "http://localhost:3001", // Frontend URL
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true, // If you are using cookies
+  })
+);
 
 app.use(express.json());
 app.use(cookieParser());

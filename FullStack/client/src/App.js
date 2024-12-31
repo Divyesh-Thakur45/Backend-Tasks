@@ -1,10 +1,15 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import Navigation from "./components/Navigation";
+import AllRoutes from "./AllRoutes";
+import Footer from "./components/Footer";
 
 function App() {
   return (
     <div>
-      <h1>Hello</h1>
+      <Navigation />
+      <AllRoutes />
+      <Footer />
     </div>
   );
 }

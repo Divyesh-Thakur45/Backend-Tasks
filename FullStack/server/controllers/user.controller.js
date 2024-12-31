@@ -53,7 +53,8 @@ const signin = async (req, res) => {
           res
             .cookie("tokenvalue", token)
             .status(200)
-            .json({ message: "token access successfully." });
+            .json({ message: "token access successfully." , userData : isValide});
+            
         });
       }
     });
