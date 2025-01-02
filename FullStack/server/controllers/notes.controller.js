@@ -19,35 +19,33 @@ const NotesCreate = async (req, res) => {
 const NotesDelete = async (req, res) => {
   const { id } = req.params;
   const isDelete = await NotesModel.findById(id);
-  // res.send(isDelete.userId)
+  console.log(isDelete._id != isDelete.userId)
+  // res.status(200).send({ message: "ok" });
   if (!isDelete) {
     return res.status(404).send({ message: "Note not found" });
   }
-  if (isDelete.userId != req.user._id) {
-    return res
-      .status(403)
-      .send({ message: "You are not authorized to delete this note" });
-  }
+  // if (isDelete.userId != isDelete._id) {
+  //   return res
+  //     .status(403)
+  //     .send({ message: "You are not authorized to delete this note" });
+  // }
   await NotesModel.findByIdAndDelete(isDelete);
   return res.status(200).send({ message: "Note deleted successfully" });
 };
 
 const NotesGet = async (req, res) => {
-  const { id } = req.params;
-
-  // console.log(userId);
-  const isValide = await NotesModel.findById(id);
-  const userId = isValide.userId;
-  // console.log(userId);
+  const { userId } = req.params; // Extract the ID from request parameters
+  console.log(userId);
   try {
-    if (!isValide) {
-      return res.status(404).send({ message: "User not found" });
+    const notes = await NotesModel.find({ userId: userId });
+    console.log(notes)
+    console.log(notes.length > 0);
+    if (notes.length > 0) {
+      return res.status(200).send({ message: "get All Notes", notes });
     }
-    const obj = await NotesModel.find({ userId });
-    console.log(obj);
   } catch (error) {
-    console.log(error);
-    return res.status(404).send({ message: error });
+    console.error("Error fetching notes:", error);
+    return res.status(500).send({ message: "Internal server error" });
   }
 };
 
@@ -55,12 +53,16 @@ const NotesOneGet = async (req, res) => {
   const { id } = req.params;
 
   const isValide = await NotesModel.findById(id);
+  console.log(isValide);
+
   try {
     if (!isValide) {
       return res.status(404).send({ message: "User not found" });
     }
-    const obj = await NotesModel.find({ isValide });
+    const idOfUser = isValide._id;
+    const obj = await NotesModel.findOne({ _id: idOfUser });
     console.log(obj);
+    res.send(obj);
   } catch (error) {
     console.log(error);
     return res.status(404).send({ message: error });

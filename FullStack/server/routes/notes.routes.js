@@ -8,6 +8,7 @@ const {
   AdmineGet,
 } = require("../controllers/notes.controller");
 const upload = require("../middleware/multer");
+const { isAuth } = require("../middleware/isAuth");
 
 const NoteRoutes = express.Router();
 
@@ -18,10 +19,10 @@ NoteRoutes.post("/create", NotesCreate);
 NoteRoutes.delete("/delete/:id", NotesDelete);
 
 // All Notes Get
-NoteRoutes.get("/getNotes/:id", NotesGet);
+NoteRoutes.get("/getNotes/:userId",isAuth , NotesGet);
 
 // Single Notes Get
-NoteRoutes.get("/getNotes/:id", NotesOneGet);
+NoteRoutes.get("/getSingleNotes/:id", NotesOneGet);
 
 // Notes Update
 NoteRoutes.patch("/update/:noteId", upload.single("file"), NotesUpdate);

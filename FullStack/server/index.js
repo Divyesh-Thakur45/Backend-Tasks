@@ -10,7 +10,7 @@ require("dotenv").config();
 const app = express();
 app.use(
   cors({
-    origin: "http://localhost:3001", // Frontend URL
+    origin: "http://localhost:3000", // Frontend URL
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true, // If you are using cookies
   })
@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/user", userRoutes);
-app.use("/notes", isAuth, NoteRoutes);
+app.use("/notes", NoteRoutes);
 
 app.listen(process.env.PORT || 3000, async () => {
   try {
