@@ -9,7 +9,7 @@ const Signup = () => {
     const [name, setname] = useState(null)
     const handleSubmite = (e) => {
         e.preventDefault()
-        // console.log(email, password, name)
+        console.log(email, password, name)
         axios.post("http://localhost:8080/user/signup", {
             name,
             email,

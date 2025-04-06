@@ -10,8 +10,7 @@ const isAuth = (req, res, next) => {
     if (err) {
       return res.status(403).json({ message: "Invalid Token" });
     }
-    // res.send("ok");
-    // console.log(decoded);
+    
     req.user = decoded.userData;
     next();
   });

@@ -5,7 +5,7 @@ export const Notes = () => {
     const [showNotes, setshowNotes] = useState([])
     const [deleteNotes, setdeleteNotes] = useState(null)
     const userData = JSON.parse(localStorage.getItem('userInfo'))
-    
+
     // delete notes
     const handleDelete = (id) => {
         axios.delete(`http://localhost:8080/notes/delete/${id}`).then((res) => setdeleteNotes(res))

@@ -20,7 +20,7 @@ const NotesDelete = async (req, res) => {
   const { id } = req.params;
   const isDelete = await NotesModel.findById(id);
   console.log(isDelete._id != isDelete.userId)
-  // res.status(200).send({ message: "ok" });
+  
   if (!isDelete) {
     return res.status(404).send({ message: "Note not found" });
   }
