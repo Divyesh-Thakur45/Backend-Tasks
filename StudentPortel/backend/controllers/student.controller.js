@@ -62,13 +62,35 @@ const deleteStudent = async (req, res) => {
 // update students
 const updateStudent = async (req, res) => {
   const { id } = req.params;
-  const isExist = await studentModel.findOne({ _id: id });
-  if (!isExist) {
-    return res.status(400).json({ message: "Student not found" });
+
+  try {
+    const isExist = await studentModel.findById(id);
+    if (!isExist) {
+      return res.status(400).json({ message: "Student not found" });
+    }
+
+    // Now update the student with both body and file data
+    const updatedStd = await studentModel.findByIdAndUpdate(
+      isExist,
+      {
+        ...req.body,
+        image: req.file?.originalname,
+      },
+      {
+        new: true,
+      }
+    );
+
+    res
+      .status(200)
+      .json({ message: "Student updated successfully", updatedStd });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
   }
-  await studentModel.findByIdAndUpdate(isExist);
-  res.status(200).json({ message: "Student updated successfully" });
 };
+
 module.exports = {
   createStudent,
   getallStudent,
