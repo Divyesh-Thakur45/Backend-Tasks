@@ -1,66 +1,87 @@
-import { Dropzone, FileMosaic } from '@files-ui/react'
-import React from 'react'
-import { useState } from 'react';
+import { Dropzone, FileMosaic } from '@files-ui/react';
+import axios from 'axios';
+import React, { useState } from 'react';
 
 const Create = () => {
     const [files, setFiles] = useState([]);
-    const updateFiles = (incommingFiles) => {
-        setFiles(incommingFiles);
+    const [image, setImage] = useState(null);
+    const [email, setEmail] = useState("");
+    const [name, setName] = useState("");
+    const [number, setNumber] = useState("");
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        const formData = new FormData();
+        formData.append("image", image);
+        formData.append("email", email);
+        formData.append("name", name);
+        formData.append("number", number);
+
+        axios.post("http://localhost:8080/contact/create", formData, {
+            withCredentials: true,
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        })
+            .then((res) => console.log(res.data))
+            .catch((err) => console.log(err));
     };
+
+    const updateFiles = (incomingFiles) => {
+        setFiles(incomingFiles);
+        if (incomingFiles.length > 0) {
+            setImage(incomingFiles[0].file); // Set raw File object
+        }
+    };
+
     return (
-        <div>
-            <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-                <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-md">
-                    <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Update Contact</h2>
-                    <form className="space-y-4">
-                        <div>
-                            <label className="block mb-1 font-medium">Image</label>
-                            {/* <input
-                                    type="file"
-                                    name="image"
-                                    onChange={(e) => setimage(e.target.files[0])}
-                                    className="w-full border border-gray-300 rounded px-4 py-2"
-                                /> */}
-                            <Dropzone onChange={updateFiles} value={files} maxFiles={1}>
-                                {files.map((file) => (
-                                    <FileMosaic {...file} preview />
-                                ))}
-                            </Dropzone>
-                        </div>
-                        <div>
-                            <label className="block mb-1 font-medium">Email</label>
-                            <input
-                                type="email"
-                                className="w-full border border-gray-300 rounded px-4 py-2"
-                            />
-                        </div>
-                        <div>
-                            <label className="block mb-1 font-medium">name</label>
-                            <input
-                                type="text"
-
-                                className="w-full border border-gray-300 rounded px-4 py-2"
-                            />
-                        </div>
-                        <div>
-                            <label className="block mb-1 font-medium">Number</label>
-                            <input
-                                type="text"
-
-                                className="w-full border border-gray-300 rounded px-4 py-2"
-                            />
-                        </div>
-                        <button
-                            type="submit"
-                            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
-                        >
-                            Create
-                        </button>
-                    </form>
-                </div>
+        <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+            <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-md">
+                <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Update Contact</h2>
+                <form className="space-y-4" onSubmit={handleSubmit}>
+                    <div>
+                        <label className="block mb-1 font-medium">Image</label>
+                        <Dropzone onChange={updateFiles} value={files} maxFiles={1}>
+                            {files.map((file) => (
+                                <FileMosaic key={file.id} {...file} preview />
+                            ))}
+                        </Dropzone>
+                    </div>
+                    <div>
+                        <label className="block mb-1 font-medium">Email</label>
+                        <input
+                            type="email"
+                            className="w-full border border-gray-300 rounded px-4 py-2"
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                    </div>
+                    <div>
+                        <label className="block mb-1 font-medium">Name</label>
+                        <input
+                            type="text"
+                            className="w-full border border-gray-300 rounded px-4 py-2"
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                    </div>
+                    <div>
+                        <label className="block mb-1 font-medium">Number</label>
+                        <input
+                            type="text"
+                            className="w-full border border-gray-300 rounded px-4 py-2"
+                            onChange={(e) => setNumber(e.target.value)}
+                        />
+                    </div>
+                    <button
+                        type="submit"
+                        className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+                    >
+                        Create
+                    </button>
+                </form>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Create
+export default Create;

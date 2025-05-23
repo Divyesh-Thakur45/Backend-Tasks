@@ -30,7 +30,7 @@ const Contact = () => {
                 {data.map((user, idx) => (
                     <div key={idx} className="bg-white shadow-md rounded-xl overflow-hidden border border-gray-200 p-6 hover:shadow-xl transition duration-300">
                         <img
-                            src={user.image}
+                            src={`http://localhost:8080/${user.image}`}
                             alt={user.name}
                             className="w-24 h-24 mx-auto rounded-full object-cover border-4 border-blue-500"
                         />
