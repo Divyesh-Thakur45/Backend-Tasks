@@ -1,0 +1,66 @@
+import axios from 'axios'
+import React from 'react'
+import { useState } from 'react'
+
+const Signin = () => {
+    const [email, setemail] = useState("")
+    const [password, setpassword] = useState("")
+    const [token, settoken] = useState("")
+    const [id, setid] = useState("")
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        let obj = {
+            email,
+            password
+        }
+        axios.post("http://localhost:8080/user/signin", obj, {
+            withCredentials: true
+        })
+            .then((res) => {
+                settoken(res.data.token),
+                    setid(res.data.data._id)
+            })
+            .catch((err) => console.log(err))
+
+        localStorage.setItem("token", JSON.stringify(token))
+    }
+    return (
+        <div>
+            <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+                <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-md">
+                    <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Sign Up</h2>
+                    <form className="space-y-4" onSubmit={handleSubmit}>
+                        <div>
+                            <label htmlFor="email" className="block mb-1 font-medium">Email</label>
+                            <input
+                                type="email"
+                                name="email"
+                                className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                onChange={(e) => setemail(e.target.value)}
+                            />
+                        </div>
+
+                        <div>
+                            <label htmlFor="password" className="block mb-1 font-medium">Password</label>
+                            <input
+                                type="password"
+                                name="password"
+                                className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                onChange={(e) => setpassword(e.target.value)}
+                            />
+                        </div>
+
+                        <button
+                            type="submit"
+                            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+                        >
+                            Sign In
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export default Signin
