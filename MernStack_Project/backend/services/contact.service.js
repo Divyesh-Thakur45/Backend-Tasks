@@ -23,7 +23,7 @@ const contactService = async (image, name, email, number, id) => {
 const allServices = async (id) => {
   try {
     const data = await contactModel.find({ userId: id });
-    if (data.length <= 0) {
+    if (data.length < 0) {
       return {
         status: 409,
         message: "You don't have data ⚠️",

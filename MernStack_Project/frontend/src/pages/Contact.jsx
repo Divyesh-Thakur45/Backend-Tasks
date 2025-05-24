@@ -1,36 +1,46 @@
 import axios from 'axios'
-import React from 'react'
-import { useEffect } from 'react'
-import { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { allContext } from './Allcontext'
 
 const Contact = () => {
-    const [data, setdata] = useState([])
-    const update = useNavigate()
+    const { id } = useContext(allContext)
+    const [data, setData] = useState([])
+    console.log(data)
+    const navigate = useNavigate()
     console.log(data)
     const showData = () => {
-        axios.get("http://localhost:8080/contact/all/683021ed425fbc47e1e976e2")
-            .then((res) => setdata(res.data.data))
+
+        axios.get(`http://localhost:8080/contact/all/${id}`)
+            .then((res) => setData(res?.data?.data))
+            .catch((err) => console.log(err))
+
+    }
+
+    const handleDelete = (contactId) => {
+        axios.delete(`http://localhost:8080/contact/delete/${contactId}`)
+            .then((res) => {
+                console.log(res.data)
+                showData() // ✅ Update list after delete
+            })
             .catch((err) => console.log(err))
     }
-    const handleDelete = (id) => {
-        axios.delete(`http://localhost:8080/contact/delete/${id}`)
-            .then((res) => console.log(res.data))
-            .catch((err) => console.log(err))
+
+    const handleUpdate = (contactId) => {
+        navigate(`/update/${contactId}`)
     }
-    const handleUpdate = (id) => {
-        update(`/update/${id}`)
-    }
+
     useEffect(() => {
         showData()
-    }, [])
+    }, [id]) // ✅ wait for id from context
+
     return (
-        <div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-4">
+        <div className="p-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 {data.map((user, idx) => (
                     <div key={idx} className="bg-white shadow-md rounded-xl overflow-hidden border border-gray-200 p-6 hover:shadow-xl transition duration-300">
                         <img
-                            src={`http://localhost:8080/${user.image}`}
+                            src={`http://localhost:8080/photos/${user.image}`}
                             alt={user.name}
                             className="w-24 h-24 mx-auto rounded-full object-cover border-4 border-blue-500"
                         />
@@ -43,17 +53,18 @@ const Contact = () => {
                             )}
                         </div>
                         <div className="mt-4 flex justify-center space-x-4">
-                            <button className="bg-red-500 text-white px-4 py-1 rounded-full text-sm hover:bg-red-600 transition" onClick={() => handleDelete(user._id)}>
+                            <button className="bg-red-500 text-white px-4 py-1 rounded-full text-sm hover:bg-red-600 transition"
+                                onClick={() => handleDelete(user._id)}>
                                 Delete
                             </button>
-                            <button className="bg-blue-500 text-white px-4 py-1 rounded-full text-sm hover:bg-blue-600 transition" onClick={() => handleUpdate(user._id)}>
+                            <button className="bg-blue-500 text-white px-4 py-1 rounded-full text-sm hover:bg-blue-600 transition"
+                                onClick={() => handleUpdate(user._id)}>
                                 Update
                             </button>
                         </div>
                     </div>
                 ))}
             </div>
-
         </div>
     )
 }

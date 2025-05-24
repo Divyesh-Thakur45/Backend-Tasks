@@ -4,6 +4,7 @@ var cors = require("cors");
 var cookieParser = require("cookie-parser");
 const { connection } = require("./config/db");
 const userRouter = require("./routes/user.routes");
+const path = require('path'); // ✅ FIXED
 const contactRouter = require("./routes/contact.routes");
 
 const app = express();
@@ -24,6 +25,8 @@ app.use(
 app.use("/user", userRouter);
 app.use("/contact", contactRouter);
 
+// Serve photos folder as static
+app.use('/photos', express.static(path.join(__dirname, 'photos')));
 app.listen(process.env.PORT, async () => {
   try {
     await connection;

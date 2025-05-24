@@ -53,18 +53,18 @@ const Update = () => {
                 <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Update Contact</h2>
                 <form className="space-y-4" onSubmit={handleUpdate}>
                     <div>
-                        <label className="block mb-1 font-medium">Image</label>
+                        {/* <label className="block mb-1 font-medium">Image</label> */}
                         {/* <input
                             type="file"
                             name="image"
                             onChange={(e) => setimage(e.target.files[0])}
                             className="w-full border border-gray-300 rounded px-4 py-2"
                         /> */}
-                        <Dropzone onChange={updateFiles} value={files} maxFiles={1}>
+                        {/* <Dropzone onChange={updateFiles} value={files} maxFiles={1}>
                             {files.map((file) => (
                                 <FileMosaic {...file} preview />
                             ))}
-                        </Dropzone>
+                        </Dropzone> */}
                     </div>
                     <div>
                         <label className="block mb-1 font-medium">Email</label>
@@ -80,7 +80,7 @@ const Update = () => {
                         <input
                             type="text"
                             value={name}
-                            onChange={(e) => setpassword(e.target.value)}
+                            onChange={(e) => setname(e.target.value)}
                             className="w-full border border-gray-300 rounded px-4 py-2"
                         />
                     </div>

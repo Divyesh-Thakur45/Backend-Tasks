@@ -1,8 +1,12 @@
 import axios from 'axios'
-import React from 'react'
+import React, { useContext } from 'react'
 import { useState } from 'react'
+import { allContext } from './Allcontext'
+import { useNavigate } from 'react-router-dom'
 
 const Signup = () => {
+    const navigate = useNavigate()
+    const { success, setSuccess, token, setToken, id, setId } = useContext(allContext)
     const [email, setemail] = useState("")
     const [password, setpassword] = useState("")
     const [conformPassword, setconformPassword] = useState("")
@@ -14,7 +18,21 @@ const Signup = () => {
             conformPassword
         }
         axios.post("http://localhost:8080/user/signup", obj)
-            .then((res) => console.log(res.data.message))
+            .then((res) => {
+                console.log(res.data),
+                    setSuccess(res.data?.success),
+                    setId(res.data?.data?._id)
+                // Now auto-sign in the user
+                axios.post("http://localhost:8080/user/signin", { email, password }, { withCredentials: true })
+                    .then((loginRes) => {
+                        setToken(loginRes.data.token);
+                        setId(loginRes.data.data._id);
+                        setSuccess(loginRes.data.success);
+                        localStorage.setItem("token", JSON.stringify(loginRes.data.token));
+                        navigate("/contact");
+                    })
+                    .catch((err) => console.log("Auto-signin error:", err));
+            })
             .catch((err) => console.log(err))
 
     }

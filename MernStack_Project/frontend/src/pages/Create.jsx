@@ -1,13 +1,17 @@
 import { Dropzone, FileMosaic } from '@files-ui/react';
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { allContext } from './Allcontext';
+import { useNavigate } from 'react-router-dom';
 
 const Create = () => {
+    const navigate = useNavigate()
     const [files, setFiles] = useState([]);
     const [image, setImage] = useState(null);
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
     const [number, setNumber] = useState("");
+    const { setId } = useContext(allContext)
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -24,7 +28,11 @@ const Create = () => {
                 "Content-Type": "multipart/form-data",
             },
         })
-            .then((res) => console.log(res.data))
+            .then((res) => (
+                console.log(res.data),
+                setId(res.data?.data?.userId),
+                navigate("/contact")
+            ))
             .catch((err) => console.log(err));
     };
 

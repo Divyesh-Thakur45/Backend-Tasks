@@ -1,12 +1,15 @@
 import axios from 'axios'
-import React from 'react'
+import React, { useContext } from 'react'
 import { useState } from 'react'
+import { allContext } from './Allcontext'
+import { useNavigate } from 'react-router-dom'
 
 const Signin = () => {
+    const { success, setSuccess,setId } = useContext(allContext)
     const [email, setemail] = useState("")
     const [password, setpassword] = useState("")
     const [token, settoken] = useState("")
-    const [id, setid] = useState("")
+    const navigate = useNavigate()
     const handleSubmit = (e) => {
         e.preventDefault()
         let obj = {
@@ -17,18 +20,21 @@ const Signin = () => {
             withCredentials: true
         })
             .then((res) => {
-                settoken(res.data.token),
-                    setid(res.data.data._id)
+                console.log(res.data),
+                    settoken(res.data.token),
+                    setId(res.data.data._id),
+                    setSuccess(res.data.success),
+                    navigate("/contact")
+                localStorage.setItem("token", JSON.stringify(res.data.token))
             })
             .catch((err) => console.log(err))
 
-        localStorage.setItem("token", JSON.stringify(token))
     }
     return (
         <div>
             <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
                 <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-md">
-                    <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Sign Up</h2>
+                    <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Sign In</h2>
                     <form className="space-y-4" onSubmit={handleSubmit}>
                         <div>
                             <label htmlFor="email" className="block mb-1 font-medium">Email</label>
